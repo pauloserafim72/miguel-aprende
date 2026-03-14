@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🌟 Toque e Aprenda — Para o Miguel!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #6EC6F5;
+    --sun: #FFD93D;
+    --grass: #6BCB77;
+    --coral: #FF6B6B;
+    --purple: #C77DFF;
+    --peach: #FFB347;
+    --white: #FFFDF7;
+    --dark: #2D2D2D;
+    --card-radius: 28px;
+    --bounce: cubic-bezier(.68,-0.55,.27,1.55);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(160deg, #b8f0ff 0%, #ffecd2 50%, #d4f5c4 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    text-align: center;
+    padding: 18px 16px 10px;
+    position: relative;
+  }
+  .dedication {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(90deg, #ff6b6b, #c77dff, #6ec6f5);
+    border-radius: 50px;
+    display: inline-block;
+    padding: 6px 20px;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    letter-spacing: 0.3px;
+  }
+  .app-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(26px, 6vw, 42px);
+    color: var(--dark);
+    text-shadow: 3px 3px 0 rgba(255,255,255,0.7);
+    line-height: 1.1;
+  }
+  .stars-row {
+    font-size: 20px;
+    letter-spacing: 4px;
+    margin-top: 4px;
+  }
+
+  /* ===== NAV TABS ===== */
+  .nav-scroll {
+    overflow-x: auto;
+    padding: 10px 12px 6px;
+    display: flex;
+    gap: 8px;
+    scrollbar-width: none;
+  }
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    font-family: 'Fredoka One', cursive;
+    font-size: 14px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.6);
+    color: #555;
+    transition: all .25s var(--bounce);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .tab-btn[data-tab="palavras"].active { background: var(--coral); }
+  .tab-btn[data-tab="animais"].active  { background: var(--grass); }
+  .tab-btn[data-tab="cores"].active    { background: var(--purple); }
+  .tab-btn[data-tab="silabas"].active  { background: var(--sky); }
+  .tab-btn[data-tab="cadê"].active     { background: var(--peach); }
+  .tab-btn[data-tab="familia"].active  { background: #ff8fab; }
+  .tab-btn[data-tab="musica"].active   { background: var(--sun); color: #333; }
+
+  /* ===== SECTIONS ===== */
+  .section { display: none; padding: 12px 14px 30px; animation: fadeIn .35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 14px;
+    color: var(--dark);
+  }
+
+  /* ===== CARD GRID ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: white;
+    border-radius: var(--card-radius);
+    padding: 18px 10px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .18s var(--bounce), box-shadow .18s;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.5) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .card:active { transform: scale(0.93); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  .card:active::before { opacity: 1; }
+  .card.pop { animation: pop .4s var(--bounce); }
+  @keyframes pop { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 70%{transform:scale(0.95)} 100%{transform:scale(1)} }
+
+  .card-emoji { font-size: 58px; line-height: 1; margin-bottom: 10px; display: block; }
+  .card-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    color: var(--dark);
+    letter-spacing: 1px;
+  }
+
+  /* ===== ANIMAL CARDS (colored bg) ===== */
+  .card.verde   { background: linear-gradient(135deg,#d4f5c4,#a8e6a3); }
+  .card.azul    { background: linear-gradient(135deg,#b8f0ff,#80d4f5); }
+  .card.laranja { background: linear-gradient(135deg,#ffe5b4,#ffc870); }
+  .card.rosa    { background: linear-gradient(135deg,#ffd6e0,#ffb3c6); }
+  .card.lilas   { background: linear-gradient(135deg,#e8d5ff,#d0a8ff); }
+  .card.amarelo { background: linear-gradient(135deg,#fff9c4,#ffd93d); }
+  .card.vermelho{ background: linear-gradient(135deg,#ffd5d5,#ff9999); }
+  .card.turquesa{ background: linear-gradient(135deg,#c4f5f0,#80ddd5); }
+
+  /* ===== COR CARDS ===== */
+  .color-card {
+    border-radius: var(--card-radius);
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+    transition: transform .18s var(--bounce);
+    user-select: none;
+  }
+  .color-card:active { transform: scale(0.93); }
+  .color-card.pop { animation: pop .4s var(--bounce); }
+  .color-card-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: white;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    letter-spacing: 2px;
+  }
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+    gap: 14px;
+  }
+
+  /* ===== SÍLABAS ===== */
+  .silaba-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 12px;
+  }
+  .silaba-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(28px, 7vw, 42px);
+    padding: 22px 6px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    transition: transform .18s var(--bounce);
+    user-select: none;
+    line-height: 1;
+  }
+  .silaba-btn:active { transform: scale(0.9); }
+  .silaba-btn.pop { animation: pop .4s var(--bounce); }
+
+  /* ===== CADÊ? ===== */
+  #cadê .target-word {
+    font-family: 'Fredoka One', cursive;
+    font-size: 30px;
+    text-align: center;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+  #cadê .instruction {
+    text-align: center;
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 18px;
+  }
+  #cadê .cade-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 14px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .cade-card {
+    background: white;
+    border-radius: var(--card-radius);
+    padding: 20px 10px 14px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    transition: transform .18s var(--bounce);
+    user-select: none;
+  }
+  .cade-card:active { transform: scale(0.92); }
+  .cade-card.correct { background: linear-gradient(135deg,#d4f5c4,#a8e6a3); animation: pop .5s var(--bounce); }
+  .cade-card.wrong   { background: linear-gradient(135deg,#ffd5d5,#ffaaaa); animation: shake .4s ease; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+  }
+  .cade-emoji { font-size: 56px; }
+  .cade-label { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--dark); margin-top: 6px; }
+  #cadê .next-btn {
+    display: block;
+    margin: 22px auto 0;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, var(--peach), #ff8c42);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255,140,66,0.4);
+    transition: transform .18s;
+  }
+  #cadê .next-btn:active { transform: scale(0.95); }
+  .score-row { text-align: center; font-family: 'Fredoka One', cursive; font-size: 20px; margin-bottom: 10px; color: #555; }
+
+  /* ===== FAMÍLIA ===== */
+  .familia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+    gap: 14px;
+  }
+  .familia-card {
+    background: white;
+    border-radius: var(--card-radius);
+    padding: 20px 10px 16px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+    transition: transform .18s var(--bounce);
+    user-select: none;
+  }
+  .familia-card:active { transform: scale(0.93); }
+  .familia-card.pop { animation: pop .4s var(--bounce); }
+  .familia-avatar { font-size: 64px; line-height: 1; margin-bottom: 8px; }
+  .familia-name { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--dark); }
+  .familia-role { font-size: 12px; color: #888; margin-top: 2px; }
+
+  /* ===== MÚSICA ===== */
+  .musica-info {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+  .musica-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+    gap: 14px;
+  }
+  .musica-btn {
+    border: none;
+    border-radius: 24px;
+    padding: 24px 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transition: transform .18s var(--bounce);
+    user-select: none;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .musica-btn:active { transform: scale(0.92); }
+  .musica-btn.pop { animation: pop .4s var(--bounce); }
+  .musica-note { font-size: 22px; }
+
+  /* ===== PARABÉNS OVERLAY ===== */
+  #parabens {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  #parabens.show { display: flex; animation: fadeIn .3s ease; }
+  .parabens-box {
+    background: white;
+    border-radius: 36px;
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: pop .5s var(--bounce);
+    max-width: 320px;
+  }
+  .parabens-emoji { font-size: 72px; margin-bottom: 10px; }
+  .parabens-text { font-family: 'Fredoka One', cursive; font-size: 30px; color: var(--dark); margin-bottom: 8px; }
+  .parabens-sub { font-size: 16px; color: #777; }
+  .confetti { position: fixed; top: -20px; pointer-events: none; font-size: 26px; animation: fall linear forwards; }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 13px;
+    color: rgba(0,0,0,0.4);
+    font-weight: 700;
+  }
+
+  /* ===== SPEAKING INDICATOR ===== */
+  .speaking-ring {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--coral), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: scale(0);
+    transition: all .25s var(--bounce);
+    z-index: 50;
+  }
+  .speaking-ring.active { opacity: 1; transform: scale(1); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(199,125,255,0.5)} 50%{box-shadow:0 0 0 14px rgba(199,125,255,0)} }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="dedication">💛 Desenvolvido por Papai Paulo e Mamãe Dani para nosso filho amado Miguel 💙</div>
+  <div class="app-title">🌟 Toque e Aprenda!</div>
+  <div class="stars-row">⭐🎈🌈🎉⭐</div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-scroll">
+  <button class="tab-btn active" data-tab="palavras">🗣️ Palavras</button>
+  <button class="tab-btn" data-tab="animais">🐾 Animais</button>
+  <button class="tab-btn" data-tab="cores">🎨 Cores</button>
+  <button class="tab-btn" data-tab="silabas">🔤 Sílabas</button>
+  <button class="tab-btn" data-tab="cadê">🔍 Cadê o...?</button>
+  <button class="tab-btn" data-tab="familia">👨‍👩‍👦 Família</button>
+  <button class="tab-btn" data-tab="musica">🎵 Músicas</button>
+</nav>
+
+<!-- ===== PALAVRAS ===== -->
+<section id="palavras" class="section active">
+  <div class="section-title">🗣️ Toque e Ouça!</div>
+  <div class="card-grid" id="palavrasGrid"></div>
+</section>
+
+<!-- ===== ANIMAIS ===== -->
+<section id="animais" class="section">
+  <div class="section-title">🐾 Sons dos Animais</div>
+  <div class="card-grid" id="animaisGrid"></div>
+</section>
+
+<!-- ===== CORES ===== -->
+<section id="cores" class="section">
+  <div class="section-title">🎨 Que cor é essa?</div>
+  <div class="color-grid" id="coresGrid"></div>
+</section>
+
+<!-- ===== SÍLABAS ===== -->
+<section id="silabas" class="section">
+  <div class="section-title">🔤 Sílabas</div>
+  <div class="silaba-grid" id="silabasGrid"></div>
+</section>
+
+<!-- ===== CADÊ ===== -->
+<section id="cadê" class="section">
+  <div class="score-row" id="scoreRow">⭐ Pontos: <span id="scoreNum">0</span></div>
+  <div class="target-word" id="cadeTarget">Carregando...</div>
+  <div class="instruction">👆 Toque na imagem certa!</div>
+  <div class="cade-grid" id="cadeGrid"></div>
+  <button class="next-btn" onclick="nextCade()">Próximo ➡️</button>
+</section>
+
+<!-- ===== FAMÍLIA ===== -->
+<section id="familia" class="section">
+  <div class="section-title">👨‍👩‍👦 Minha Família</div>
+  <div class="familia-grid" id="familiaGrid"></div>
+</section>
+
+<!-- ===== MÚSICA ===== -->
+<section id="musica" class="section">
+  <div class="section-title">🎵 Cantando!</div>
+  <p class="musica-info">Toque nos botões e cante junto! 🎤</p>
+  <div class="musica-grid" id="musicaGrid"></div>
+</section>
+
+<!-- PARABÉNS OVERLAY -->
+<div id="parabens">
+  <div class="parabens-box">
+    <div class="parabens-emoji">🎉</div>
+    <div class="parabens-text">Muito Bem, Miguel!</div>
+    <div class="parabens-sub">Você acertou! Que inteligente! 💛</div>
+  </div>
+</div>
+
+<!-- Speaking indicator -->
+<div class="speaking-ring" id="speakRing">🔊</div>
+
+<footer>💛 Feito com amor por Papai Paulo e Mamãe Dani 💙</footer>
+
+<script>
+// ===== SPEECH =====
+let synth = window.speechSynthesis;
+let voices = [];
+function loadVoices() {
+  voices = synth.getVoices();
+}
+loadVoices();
+if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = loadVoices;
+
+const speakRing = document.getElementById('speakRing');
+function falar(texto, rate = 0.78, pitch = 1.1) {
+  synth.cancel();
+  const msg = new SpeechSynthesisUtterance(texto);
+  msg.lang = 'pt-BR';
+  msg.rate = rate;
+  msg.pitch = pitch;
+  const ptVoice = voices.find(v => v.lang === 'pt-BR') || voices.find(v => v.lang.startsWith('pt'));
+  if (ptVoice) msg.voice = ptVoice;
+  msg.onstart = () => { speakRing.classList.add('active'); };
+  msg.onend = () => { speakRing.classList.remove('active'); };
+  synth.speak(msg);
+}
+
+function popCard(el) {
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+}
+
+// ===== DATA =====
+const palavras = [
+  { emoji: '⚽', label: 'BOLA', fala: 'bola' },
+  { emoji: '💧', label: 'ÁGUA', fala: 'água' },
+  { emoji: '🍌', label: 'BANANA', fala: 'banana' },
+  { emoji: '🥛', label: 'LEITE', fala: 'leite' },
+  { emoji: '👟', label: 'SAPATO', fala: 'sapato' },
+  { emoji: '🥄', label: 'COLHER', fala: 'colher' },
+  { emoji: '🍼', label: 'MAMADEIRA', fala: 'mamadeira' },
+  { emoji: '🚗', label: 'CARRO', fala: 'carro' },
+  { emoji: '🌙', label: 'LUA', fala: 'lua' },
+  { emoji: '☀️', label: 'SOL', fala: 'sol' },
+  { emoji: '🏠', label: 'CASA', fala: 'casa' },
+  { emoji: '🍎', label: 'MAÇÃ', fala: 'maçã' },
+];
+
+const animais = [
+  { emoji: '🐶', label: 'CACHORRO', fala: 'au au', bg: 'verde' },
+  { emoji: '🐱', label: 'GATO', fala: 'miau', bg: 'azul' },
+  { emoji: '🐮', label: 'VACA', fala: 'muuu', bg: 'laranja' },
+  { emoji: '🐔', label: 'GALINHA', fala: 'cocoricó', bg: 'amarelo' },
+  { emoji: '🐸', label: 'SAPO', fala: 'croá croá', bg: 'verde' },
+  { emoji: '🐷', label: 'PORCO', fala: 'oinc oinc', bg: 'rosa' },
+  { emoji: '🐦', label: 'PASSARINHO', fala: 'piu piu', bg: 'azul' },
+  { emoji: '🐑', label: 'OVELHA', fala: 'béé', bg: 'lilas' },
+  { emoji: '🦁', label: 'LEÃO', fala: 'roarrr', bg: 'laranja' },
+  { emoji: '🐘', label: 'ELEFANTE', fala: 'trombeta', bg: 'turquesa' },
+  { emoji: '🦆', label: 'PATO', fala: 'quá quá', bg: 'amarelo' },
+  { emoji: '🐴', label: 'CAVALO', fala: 'iiiiih', bg: 'vermelho' },
+];
+
+const cores = [
+  { cor: '#e74c3c', label: 'VERMELHO', fala: 'vermelho' },
+  { cor: '#3498db', label: 'AZUL', fala: 'azul' },
+  { cor: '#f1c40f', label: 'AMARELO', fala: 'amarelo' },
+  { cor: '#2ecc71', label: 'VERDE', fala: 'verde' },
+  { cor: '#e67e22', label: 'LARANJA', fala: 'laranja' },
+  { cor: '#9b59b6', label: 'ROXO', fala: 'roxo' },
+  { cor: '#ff69b4', label: 'ROSA', fala: 'rosa' },
+  { cor: '#ffffff', label: 'BRANCO', fala: 'branco', border: '#ddd' },
+];
+
+const silabas = [
+  { sil: 'MA', cor: '#FF6B6B' },
+  { sil: 'PA', cor: '#6EC6F5' },
+  { sil: 'BA', cor: '#6BCB77' },
+  { sil: 'DA', cor: '#C77DFF' },
+  { sil: 'NA', cor: '#FFD93D', textColor: '#333' },
+  { sil: 'TA', cor: '#FF8FAB' },
+  { sil: 'LA', cor: '#80DEEA' },
+  { sil: 'CA', cor: '#FFB347', textColor: '#333' },
+  { sil: 'BO', cor: '#e74c3c' },
+  { sil: 'GO', cor: '#27ae60' },
+  { sil: 'MI', cor: '#8e44ad' },
+  { sil: 'TU', cor: '#2980b9' },
+  { sil: 'FI', cor: '#c0392b' },
+  { sil: 'VE', cor: '#16a085' },
+  { sil: 'SO', cor: '#d35400' },
+  { sil: 'ZA', cor: '#7f8c8d' },
+];
+
+const familiaData = [
+  { emoji: '👨', name: 'PAPAI', role: 'Paulo', fala: 'papai' },
+  { emoji: '👩', name: 'MAMÃE', role: 'Dani', fala: 'mamãe' },
+  { emoji: '👶', name: 'MIGUEL', role: 'Eu!', fala: 'Miguel' },
+  { emoji: '👴', name: 'VOVÔ', role: '', fala: 'vovô' },
+  { emoji: '👵', name: 'VOVÓ', role: '', fala: 'vovó' },
+  { emoji: '🧒', name: 'TITIO', role: '', fala: 'titio' },
+];
+
+const musicaData = [
+  { sil: 'LA', fala: 'lá lá lá', cor: '#ff6b6b' },
+  { sil: 'MA', fala: 'ma ma ma', cor: '#c77dff' },
+  { sil: 'PA', fala: 'pa pa pa', cor: '#6ec6f5' },
+  { sil: 'BA', fala: 'ba ba ba', cor: '#6bcb77' },
+  { sil: 'NA', fala: 'na na na', cor: '#ffd93d', textColor: '#333' },
+  { sil: 'DA', fala: 'da da da', cor: '#ffb347', textColor: '#333' },
+];
+
+const cadeData = [
+  { emoji: '⚽', label: 'bola' },
+  { emoji: '🐶', label: 'cachorro' },
+  { emoji: '🐱', label: 'gato' },
+  { emoji: '🐮', label: 'vaca' },
+  { emoji: '🍌', label: 'banana' },
+  { emoji: '🚗', label: 'carro' },
+  { emoji: '🌙', label: 'lua' },
+  { emoji: '☀️', label: 'sol' },
+  { emoji: '🏠', label: 'casa' },
+  { emoji: '🍎', label: 'maçã' },
+  { emoji: '🐷', label: 'porco' },
+  { emoji: '🦁', label: 'leão' },
+];
+
+// ===== RENDER =====
+function renderPalavras() {
+  const g = document.getElementById('palavrasGrid');
+  palavras.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.innerHTML = `<span class="card-emoji">${p.emoji}</span><span class="card-label">${p.label}</span>`;
+    d.onclick = () => { falar(p.fala, 0.7, 1.15); popCard(d); };
+    g.appendChild(d);
+  });
+}
+
+function renderAnimais() {
+  const g = document.getElementById('animaisGrid');
+  animais.forEach(a => {
+    const d = document.createElement('div');
+    d.className = `card ${a.bg}`;
+    d.innerHTML = `<span class="card-emoji">${a.emoji}</span><span class="card-label">${a.label}</span>`;
+    d.onclick = () => { falar(a.fala, 0.65, 1.0); popCard(d); };
+    g.appendChild(d);
+  });
+}
+
+function renderCores() {
+  const g = document.getElementById('coresGrid');
+  cores.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'color-card';
+    d.style.background = c.cor;
+    if (c.border) d.style.border = `2px solid ${c.border}`;
+    d.innerHTML = `<span class="color-card-label">${c.label}</span>`;
+    d.onclick = () => { falar(c.fala, 0.7, 1.1); popCard(d); };
+    g.appendChild(d);
+  });
+}
+
+function renderSilabas() {
+  const g = document.getElementById('silabasGrid');
+  silabas.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'silaba-btn';
+    b.textContent = s.sil;
+    b.style.background = `linear-gradient(135deg, ${s.cor}, ${s.cor}bb)`;
+    if (s.textColor) b.style.color = s.textColor;
+    b.onclick = () => { falar(s.sil, 0.6, 1.15); popCard(b); };
+    g.appendChild(b);
+  });
+}
+
+function renderFamilia() {
+  const g = document.getElementById('familiaGrid');
+  familiaData.forEach(f => {
+    const d = document.createElement('div');
+    d.className = 'familia-card';
+    d.innerHTML = `<div class="familia-avatar">${f.emoji}</div><div class="familia-name">${f.name}</div><div class="familia-role">${f.role}</div>`;
+    d.onclick = () => { falar(f.fala, 0.7, 1.1); popCard(d); };
+    g.appendChild(d);
+  });
+}
+
+function renderMusica() {
+  const g = document.getElementById('musicaGrid');
+  musicaData.forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'musica-btn';
+    b.style.background = `linear-gradient(135deg, ${m.cor}, ${m.cor}aa)`;
+    if (m.textColor) b.style.color = m.textColor;
+    b.innerHTML = `<span class="musica-note">🎵</span>${m.sil}`;
+    b.onclick = () => { falar(m.fala, 0.65, 1.2); popCard(b); };
+    g.appendChild(b);
+  });
+}
+
+// ===== CADÊ =====
+let cadeScore = 0;
+let cadeTarget = null;
+let shuffled = [];
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function nextCade() {
+  const cards = document.querySelectorAll('.cade-card');
+  cards.forEach(c => { c.classList.remove('correct','wrong'); c.style.pointerEvents = ''; });
+  
+  if (!shuffled.length) shuffled = shuffle(cadeData);
+  cadeTarget = shuffled.pop();
+  
+  let options = shuffle(cadeData.filter(c => c.label !== cadeTarget.label)).slice(0,2);
+  options.push(cadeTarget);
+  options = shuffle(options);
+  
+  document.getElementById('cadeTarget').textContent = `🔊 Cadê o ${cadeTarget.label}?`;
+  
+  const g = document.getElementById('cadeGrid');
+  g.innerHTML = '';
+  options.forEach(opt => {
+    const d = document.createElement('div');
+    d.className = 'cade-card';
+    d.innerHTML = `<div class="cade-emoji">${opt.emoji}</div><div class="cade-label">${opt.label}</div>`;
+    d.onclick = () => checkCade(d, opt);
+    g.appendChild(d);
+  });
+  
+  setTimeout(() => falar(`Cadê o ${cadeTarget.label}?`, 0.75, 1.1), 200);
+}
+
+function checkCade(el, opt) {
+  const cards = document.querySelectorAll('.cade-card');
+  cards.forEach(c => c.style.pointerEvents = 'none');
+  
+  if (opt.label === cadeTarget.label) {
+    el.classList.add('correct');
+    cadeScore++;
+    document.getElementById('scoreNum').textContent = cadeScore;
+    falar('Muito bem, Miguel! Você acertou!', 0.8, 1.2);
+    setTimeout(showParabens, 400);
+  } else {
+    el.classList.add('wrong');
+    falar('Ops! Tente de novo!', 0.8, 1.0);
+    setTimeout(() => {
+      el.classList.remove('wrong');
+      cards.forEach(c => c.style.pointerEvents = '');
+      falar(`Cadê o ${cadeTarget.label}?`, 0.75, 1.1);
+    }, 900);
+  }
+}
+
+// ===== PARABÉNS =====
+function showParabens() {
+  const overlay = document.getElementById('parabens');
+  overlay.classList.add('show');
+  spawnConfetti();
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    nextCade();
+  }, 2500);
+}
+
+function spawnConfetti() {
+  const items = ['🌟','🎉','🎈','💛','💙','🌈','⭐','🥳'];
+  for (let i = 0; i < 16; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    el.textContent = items[Math.floor(Math.random()*items.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.animationDuration = (1.5 + Math.random()*2) + 's';
+    el.style.animationDelay = (Math.random()*0.6) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+}
+
+document.getElementById('parabens').addEventListener('click', () => {
+  document.getElementById('parabens').classList.remove('show');
+  nextCade();
+});
+
+// ===== TABS =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== INIT =====
+renderPalavras();
+renderAnimais();
+renderCores();
+renderSilabas();
+renderFamilia();
+renderMusica();
+nextCade();
+</script>
+</body>
+</html>
